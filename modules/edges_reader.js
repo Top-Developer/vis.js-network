@@ -1,7 +1,7 @@
 'use strict'
 
 function edgesReader(allText){
-  
+
   var edges = [];
 
   var allTextLines = allText.split(/\r\n|\n/);
@@ -24,19 +24,16 @@ function edgesReader(allText){
 
         if( headers[j] == 'Sender' ){
 
-          edge['source'] = data[j];
+          edge['id'] = i;
+          project.nodes.forEach(function(n){
+            if( n['label'] == data[j] ) edge['from'] = n['id'];
+          });
+
         }
         if( headers[j] == 'Receiver' ){
-
-          edge['target'] = data[j];
-        }
-        if( headers[j] == 'Cost' ){
-
-          edge['cost'] = Math.round(data[j] * 100) / 100;
-        }
-        if( headers[j] == 'Quantity' ){
-
-          edge['quantity'] = Math.round(data[j] * 100) / 100;
+          project.nodes.forEach(function(n){
+            if( n['label'] == data[j] ) edge['to'] = n['id'];
+          });
         }
       }
       edges.push(edge);
